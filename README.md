@@ -1,3 +1,5 @@
+[![GitHub release](https://img.shields.io/github/v/release/ContrailRisks/SnipGuard)](https://github.com/ContrailRisks/SnipGuard/releases)
+
 # SnipGuard - Paste protection for AI prompts (MVP)
 
 **SnipGuard** is a lightweight, on‑device “DLP for prompts.” It detects and warns (or blocks) when you paste **API keys**, **PII**, or **proprietary code** into ChatGPT and other AI tools — before the text lands in the input. All detection runs **locally**; no content leaves your machine.
