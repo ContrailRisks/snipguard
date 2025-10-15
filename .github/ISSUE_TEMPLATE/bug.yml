@@ -1,0 +1,14 @@
+name: Bug report
+description: Report a problem or false positive
+title: "[bug] "
+labels: [bug]
+body:
+  - type: input
+    id: env
+    attributes: { label: Browser/version, placeholder: "Chrome 126, macOS 14.5" }
+  - type: textarea
+    id: repro
+    attributes: { label: Reproduction, description: "Steps and the exact pasted content (redact secrets!)" }
+  - type: textarea
+    id: expected
+    attributes: { label: Expected vs Actual }

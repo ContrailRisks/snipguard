@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SnipGuard Options</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto; padding: 16px; max-width: 760px; margin: 0 auto; }
+    h1 { font-size: 20px; }
+    fieldset { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 16px; }
+    label { display:block; margin: 6px 0; }
+    input[type=text] { width: 100%; padding: 6px 8px; }
+    textarea { width: 100%; height: 90px; }
+    button { padding: 8px 12px; border-radius: 8px; border: 0; background: #111827; color: #fff; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>SnipGuard — Settings</h1>
+  <fieldset>
+    <legend>Blocking</legend>
+    <label><input type="checkbox" id="api"> Block on API keys</label>
+    <label><input type="checkbox" id="pii"> Block on PII</label>
+    <label><input type="checkbox" id="code"> Block on proprietary code</label>
+  </fieldset>
+  <fieldset>
+    <legend>Allowlist domains (one per line)</legend>
+    <textarea id="allowlist" placeholder="internal.company.com
+localhost"></textarea>
+  </fieldset>
+  <fieldset>
+    <legend>Org markers (strings that flag proprietary content)</legend>
+    <textarea id="orgMarkers" placeholder="contrailrisks.com
+internal-repo-name"></textarea>
+  </fieldset>
+  <fieldset>
+    <legend>Per-site mode (host: mode)</legend>
+    <p>Modes: <code>block</code>, <code>warn</code>, <code>ignore</code>. Example: <code>chat.openai.com: block</code></p>
+    <textarea id="modeByHost" placeholder="chat.openai.com: block
+localhost: ignore"></textarea>
+  </fieldset>
+  <button id="save">Save settings</button>
+  <span id="status" style="margin-left:8px;"></span>
+  <script src="options.js"></script>
+</body>
+</html>

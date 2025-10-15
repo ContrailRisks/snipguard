@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "SnipGuard \u2014 paste protection for AI prompts",
+  "short_name": "SnipGuard",
+  "version": "0.1.0",
+  "description": "On-device detector that warns or blocks when you paste API keys, PII, or proprietary code into ChatGPT and other AI tools.",
+  "permissions": [
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "background": {
+    "service_worker": "sw.js"
+  },
+  "action": {
+    "default_title": "SnipGuard",
+    "default_popup": "options.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ],
+      "js": [
+        "src/detectors.js",
+        "src/ui.js",
+        "src/content.js"
+      ],
+      "css": [
+        "src/ui.css"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "options_page": "options.html"
+}

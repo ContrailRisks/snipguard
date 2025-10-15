@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci || npm i
+      - run: npm test
+      - name: Build zip (zip available on Linux runners)
+        run: |
+          zip -r snipguard-mvp.zip . -x "*.git*"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: snipguard-mvp
+          path: snipguard-mvp.zip

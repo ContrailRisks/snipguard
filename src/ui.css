@@ -1,0 +1,11 @@
+#sg-toast {
+  position: fixed; z-index: 2147483647; right: 16px; bottom: 16px;
+  background: #111; color: #fff; padding: 10px 12px; border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
+  max-width: 320px; line-height: 1.35;
+}
+#sg-toast .sg-btn { margin-top: 8px; margin-right: 8px; padding: 6px 10px; border-radius: 8px; border: 0; cursor: pointer; }
+#sg-toast .sg-primary { background: #5b93ff; color:#fff; }
+#sg-toast .sg-secondary { background: #2b2b2b; color:#fff; }
+#sg-toast .sg-danger { background: #ef4444; color: #fff; }
+#sg-mask-preview { white-space: pre-wrap; background: #0f172a; color:#e5e7eb; padding:8px; border-radius:8px; margin-top:8px; max-height:140px; overflow:auto; }

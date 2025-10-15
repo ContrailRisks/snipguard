@@ -1,0 +1,14 @@
+{
+  "name": "snipguard",
+  "version": "0.1.0",
+  "description": "SnipGuard \u2014 on-device paste protection for AI prompts (Chrome MV3).",
+  "author": "ContrailRisks UG and SnipGuard contributors",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --version && npm run test:unit",
+    "test:unit": "node ./tools/run-jest.mjs",
+    "build": "node ./tools/pack.mjs"
+  },
+  "devDependencies": {}
+}
