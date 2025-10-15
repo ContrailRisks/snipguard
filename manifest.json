@@ -24,22 +24,27 @@
     "default_title": "SnipGuard",
     "default_popup": "options.html"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "https://*/*",
-        "http://*/*"
-      ],
-      "js": [
-        "src/detectors.js",
-        "src/ui.js",
-        "src/content.js"
-      ],
-      "css": [
-        "src/ui.css"
-      ],
-      "run_at": "document_start"
-    }
+"content_scripts": [{
+  "matches": ["https://*/*", "http://*/*"],
+  "js": [
+    "src/detectors/types.js",
+    "src/detectors/core.js",
+    "src/detectors/secrets/openai.js",
+    "src/detectors/secrets/github.js",
+    "src/detectors/secrets/aws.js",
+    "src/detectors/secrets/stripe.js",
+    "src/detectors/pii/email.js",
+    "src/detectors/pii/phone.js",
+    "src/detectors/pii/credit-card.js",
+    "src/detectors/pii/iban.js",
+    "src/detectors/code/heuristic.js",
+    "src/detectors/code/org-markers.js",
+    "src/detectors/index.js",
+    "src/ui.js",
+    "src/content.js"
   ],
+  "css": ["src/ui.css"],
+  "run_at": "document_start"
+}],
   "options_page": "options.html"
 }
