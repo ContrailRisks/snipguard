@@ -4,6 +4,7 @@ SnipGuard is a privacy-first, on-device browser extension that intercepts pastes
 
 ## High-level components
 
+```mermaid
 flowchart LR
   A[User paste / drop] --> B(Content Script)
   B --> C(Detectors: API/PII/Code)
@@ -24,6 +25,7 @@ flowchart LR
   classDef sync fill:#e6f3ff,stroke:#5B93FF,color:#111
   classDef managed fill:#e9ffe6,stroke:#3fb950,color:#111
   classDef local fill:#f6f8fa,stroke:#aaa,color:#111
+```
 
 ## Files & responsibilities
 
@@ -58,7 +60,7 @@ flowchart LR
   - .github/workflows/*: CI, release packaging.
 
 ## Data Flows
-
+```mermaid
 sequenceDiagram
   participant U as User
   participant CS as Content Script
@@ -84,6 +86,7 @@ sequenceDiagram
     CS->>U: insert original text
   end
   note over CS: Optionally log content-free event to storage.local
+```
 
 ## Policy model
 SnipGuard merges three layers (lowest → highest precedence):
@@ -117,37 +120,29 @@ Design goal: prioritize precision for secrets; avoid blocking false positives. U
 - UI toast is a single DOM node; removed after action.
 
 ## Extensibility
-Add a new detector (provider)
+### Add a new detector (provider)
+1. Edit src/detectors.js by adding a regex to SG_RE with a clear key:
 
-Edit src/detectors.js → add a regex to SG_RE with a clear key:
-
+```
 // Cloudflare API token (context-scoped)
 cloudflare: /(?<=cf_token[:=]\s*)[A-Za-z0-9_-]{40}/g
+```
 
+2. If feasible, add a validator (checksum/structure).
+3. Update sgSanitize to preserve prefix for recognizable tokens.
+4. Add tests in tests/*.spec.mjs with synthetic samples.
+4. Update documentation (README, DETECTOR_GUIDE.md if present).
 
-If feasible, add a validator (checksum/structure).
+### Per-site modes
+- modeByHost: block | warn | ignore.
+- Apply defaults: public AI → block, docs → warn, localhost/dev → ignore.
 
-Update sgSanitize to preserve prefix for recognizable tokens.
+### Enterprise features (optional)
+- Managed policy—use chrome.storage.managed merge.
+- Bypass with justification—UI text input gating “Paste anyway”.
+- Content-free audit events—ring buffer in storage.local with JSON export.
 
-Add tests in tests/*.spec.mjs with synthetic samples.
-
-Update documentation (README, DETECTOR_GUIDE.md if present).
-
-Per-site modes
-
-modeByHost: block | warn | ignore.
-
-Apply defaults: public AI → block, docs → warn, localhost/dev → ignore.
-
-Enterprise features (optional)
-
-Managed policy—use chrome.storage.managed merge.
-
-Bypass with justification—UI text input gating “Paste anyway”.
-
-Content-free audit events—ring buffer in storage.local with JSON export.
-
-Error handling
+## Error handling
 
 DOM failures (exotic editors): fall back to document.execCommand('insertText', ...) or show “copy sanitized to clipboard”.
 
@@ -155,48 +150,32 @@ Storage errors: continue with defaults; surface a non-blocking toast message in 
 
 Regex catastrophes: avoid backtracking traps; prefer linear-time patterns.
 
-Build, test, release
+## Build, test, release
+- Load unpacked (dev): chrome://extensions.
+- Tests: npm test runs lightweight VM tests (no deps).
+- CI: runs tests and uploads a ZIP artifact on PRs.
+- Release: tag vX.Y.Z → GitHub Release with zip + checksum (optionally SBOM, signatures).
 
-Load unpacked (dev): chrome://extensions.
+## Threat model (scoped)
 
-Tests: npm test runs lightweight VM tests (no deps).
+### In scope
+- Accidental/naïve leaks via paste or file drop.
+- Common secret types, obvious PII, heuristic “code”.
 
-CI: runs tests and uploads a ZIP artifact on PRs.
+### Out of scope
+-Intentional exfiltration, steganography, novel encoding tricks.
+- OCR of screenshots, images, or PDFs (future enhancement).
+- IDE/browser outside supported editors/inputs.
 
-Release: tag vX.Y.Z → GitHub Release with zip + checksum (optionally SBOM, signatures).
+## Glossary
+- DLP (Data Loss Prevention): Controls that prevent sensitive data from leaving a boundary.
+- PII: Personally Identifiable Information.
+- Managed policy: Admin-pushed settings via enterprise/MDM (read-only to users).
 
-Threat model (scoped)
-
-In scope
-
-Accidental/naïve leaks via paste or file drop.
-
-Common secret types, obvious PII, heuristic “code”.
-
-Out of scope
-
-Intentional exfiltration, steganography, novel encoding tricks.
-
-OCR of screenshots, images, or PDFs (future enhancement).
-
-IDE/browser outside supported editors/inputs.
-
-Glossary
-
-DLP (Data Loss Prevention): Controls that prevent sensitive data from leaving a boundary.
-
-PII: Personally Identifiable Information.
-
-Managed policy: Admin-pushed settings via enterprise/MDM (read-only to users).
-
-Appendix: Key entry points
-
-document.addEventListener('paste', sgHandlePaste, true)
-
-document.addEventListener('drop', /* optional */, true)
-
-window.SG.sgDetectAll(text, orgMarkers)
-
-window.SG.sgSanitize(text, results)
+## Appendix: Key entry points
+- document.addEventListener('paste', sgHandlePaste, true)
+- document.addEventListener('drop', /* optional */, true)
+- window.SG.sgDetectAll(text, orgMarkers)
+- window.SG.sgSanitize(text, results)
 
 chrome.storage.sync / managed / local
